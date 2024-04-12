@@ -2,7 +2,7 @@
  * @jest-environment jsdom
  */
 
-import {screen, waitFor} from "@testing-library/dom"
+import {fireEvent, screen, waitFor} from "@testing-library/dom"
 import BillsUI from "../views/BillsUI.js"
 import { bills } from "../fixtures/bills.js"
 import {ROUTES, ROUTES_PATH} from "../constants/routes.js";
@@ -13,6 +13,7 @@ import mockStore from "../__mocks__/store.js";
 import router from "../app/Router.js";
 import Bills from "../containers/Bills.js";
 
+jest.mock("../app/store", () => mockStore)
 const onNavigate = (pathname) => {
   document.body.innerHTML = ROUTES({ pathname });
 };
@@ -101,5 +102,35 @@ describe("Given I am connected as an employee", () => {
         expect(ErrorPage()).toBeCalled;
       });
     });
+  })
+
+  // test d'intégration GET
+  describe("When I navigate to Bills", () => {
+    test("fetches bills from mock API GET", async () => {
+      const getSpy = jest.spyOn(mockStore, 'bills')
+      const bills = mockStore.bills()
+      expect(getSpy).toHaveBeenCalledTimes(1)
+      expect(bills).toEqual(bills)
+    })
+  })
+
+  describe("When I click to eye icon", () => {
+  test('The image modal is visible', async () => {
+    const root = document.createElement("div")
+    root.setAttribute("id", "root")
+    document.body.append(root)
+    router()
+    window.onNavigate(ROUTES_PATH.Bills)
+    await waitFor(() => screen.getByText("Mes notes de frais"))
+    const modalFile = document.getElementById('modaleFile')
+    $.fn.modal = jest.fn(() => modalFile.classList.add('show'))
+    const eyeButton = screen.getAllByTestId('icon-eye')
+    fireEvent.click(eyeButton[1])
+    const url = eyeButton[1].dataset.billUrl
+    const modal = screen.getByAltText('Bill')
+    const modalSrc = modal.src.replace('%E2%80%A6','…')
+    expect(modal).toBeTruthy()
+    expect(modalSrc).toBe(url)
+  })
   })
 })
