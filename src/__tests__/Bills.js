@@ -133,4 +133,34 @@ describe("Given I am connected as an employee", () => {
     expect(modalSrc).toBe(url)
   })
   })
+
+  describe("Given I am connected as Employee", () => {
+    describe("When an error occur", () => {
+        test("Then fetches bills and fails with 404", async () => {
+          mockStore.bills.mockImplementationOnce(() => {
+            return {
+              list : () =>  Promise.reject(new Error("Erreur 404"))
+            }
+          })
+          window.onNavigate(ROUTES_PATH.Bills)
+          await new Promise(process.nextTick);
+          const message = await screen.getByText(/Erreur 404/)
+          expect(message).toBeTruthy()
+        })
+
+        test("Then fetches messages and fails with 500", async () => {
+          mockStore.bills.mockImplementationOnce(() => {
+            return {
+              list : () =>  {
+                return Promise.reject(new Error("Erreur 500"))
+              }
+            }})
+
+          window.onNavigate(ROUTES_PATH.Bills)
+          await new Promise(process.nextTick);
+          const message = await screen.getByText(/Erreur 500/)
+          expect(message).toBeTruthy()
+        })
+      })
+    })
 })
