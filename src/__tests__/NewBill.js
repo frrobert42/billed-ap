@@ -4,6 +4,7 @@ import {localStorageMock} from "../__mocks__/localStorage.js";
 import NewBill from "../containers/NewBill.js";
 import mockedBills from "../__mocks__/store.js";
 import {ROUTES} from "../constants/routes.js";
+import Store from "../app/Store.js";
 jest.mock('../app/store', () => mockedBills);
 
 describe("Given I am connected as an employee", () => {
@@ -96,4 +97,30 @@ describe("Given I am connected as an employee", () => {
     })
   })
 
+  // POST
+  describe("Given I am a user connected as Employee", () => {
+    describe("When I navigate on New Bills page", () => {
+      test("he will create a New Bill (post)", async () => {
+        jest.mock('../app/Store');
+        const newBill = {
+          email: 'mail@domain.fr',
+          type: "Employee",
+          name:  "Frais divers",
+          amount: 123,
+          date:  "2022/06/25",
+          vat: 20,
+          pct: 10,
+          commentary: "commentaire",
+          fileUrl: "url/to/file.jpeg",
+          fileName: "justificatif-42.jpeg",
+          status: 'accepted'
+        }
+        Store.bill = () => ({ newBill, post: jest.fn().mockResolvedValue() })
+        const getSpy = jest.spyOn(Store, "bill")
+        const postReturn = Store.bill(newBill)
+        expect(getSpy).toHaveBeenCalledTimes(1)
+        expect(postReturn.newBill).toEqual(newBill)
+      })
+    })
+  })
 })

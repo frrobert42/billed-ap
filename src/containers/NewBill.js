@@ -28,22 +28,14 @@ export default class NewBill {
       alert("Le format de fichier n'est pas valide")
       this.document.querySelector(`input[data-testid="file"]`).value = '';
       return
-    } else {
-      formData.append('file', file)
-    }
+    } else formData.append('file', file)
 
     formData.append('email', email)
 
-    this.store
-      .bills()
-      .create({
+    this.store.bills().create({
         data: formData,
-        headers: {
-          noContentType: true
-        }
-      })
-      .then(({fileUrl, key}) => {
-        console.log(fileUrl)
+        headers: {noContentType: true}
+      }).then(({fileUrl, key}) => {
         this.billId = key
         this.fileUrl = fileUrl
         this.fileName = fileName
