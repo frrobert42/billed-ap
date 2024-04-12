@@ -17,12 +17,21 @@ export default class NewBill {
   }
   handleChangeFile = e => {
     e.preventDefault()
-    const file = this.document.querySelector(`input[data-testid="file"]`).files[0]
+    let file = this.document.querySelector(`input[data-testid="file"]`).files[0]
     const filePath = e.target.value.split(/\\/g)
     const fileName = filePath[filePath.length-1]
     const formData = new FormData()
     const email = JSON.parse(localStorage.getItem("user")).email
-    formData.append('file', file)
+    // check file is an image with the right extension jpg jpeg png gif
+    const allowedExtensions = /(\.jpg|\.jpeg|\.png|\.gif)$/i
+    if (!allowedExtensions.exec(fileName) || file.size > 1000000 || !file.type.includes('image')) {
+      alert("Le format de fichier n'est pas valide")
+      this.document.querySelector(`input[data-testid="file"]`).value = '';
+      return
+    } else {
+      formData.append('file', file)
+    }
+
     formData.append('email', email)
 
     this.store
