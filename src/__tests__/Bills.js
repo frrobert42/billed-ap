@@ -70,7 +70,7 @@ describe("Given I am connected as an employee", () => {
       expect(billsList).toBeTruthy()
       expect(billsList.children.length).toBe(bills.length)
     })
-    test(" getBills should return bills", () => {
+    test(" Then getBills should return bills", () => {
       const bills = newBills.getBills();
       expect(bills).toEqual(bills);
     })
@@ -106,7 +106,7 @@ describe("Given I am connected as an employee", () => {
 
   // test d'intégration GET
   describe("When I navigate to Bills", () => {
-    test("fetches bills from mock API GET", async () => {
+    test("Then fetches bills from mock API GET", async () => {
       const getSpy = jest.spyOn(mockStore, 'bills')
       const bills = mockStore.bills()
       expect(getSpy).toHaveBeenCalledTimes(1)
@@ -115,7 +115,7 @@ describe("Given I am connected as an employee", () => {
   })
 
   describe("When I click to eye icon", () => {
-  test('The image modal is visible', async () => {
+  test('Then the image modal is visible', async () => {
     const root = document.createElement("div")
     root.setAttribute("id", "root")
     document.body.append(root)

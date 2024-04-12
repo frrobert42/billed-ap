@@ -20,7 +20,7 @@ describe("Given I am connected as an employee", () => {
     })
   })
   describe("When I am on NewBill Page", () => {
-    test("the form is visible and I can submit the form", () => {
+    test("Then the form is visible and can be submit", () => {
       document.body.innerHTML = NewBillUI()
 
       const file = document.querySelector(`input[data-testid="file"]`);
@@ -34,7 +34,7 @@ describe("Given I am connected as an employee", () => {
   })
 
   describe("When, I click on the submit button", () => {
-    test("Then, the bill should be sent", () => {
+    test("Then the bill should be sent", () => {
       jest.spyOn(mockedBills, 'bills');
       Object.defineProperty(window, 'localStorage', {value: localStorageMock});
       window.localStorage.setItem('user', JSON.stringify({
@@ -100,7 +100,7 @@ describe("Given I am connected as an employee", () => {
   // POST
   describe("Given I am a user connected as Employee", () => {
     describe("When I navigate on New Bills page", () => {
-      test("he will create a New Bill (post)", async () => {
+      test("Then it will post a New Bill", async () => {
         jest.mock('../app/Store');
         const newBill = {
           email: 'mail@domain.fr',
